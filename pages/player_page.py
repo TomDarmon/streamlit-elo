@@ -11,7 +11,7 @@ def players_page():
     st.header("Registered Players")
     
     # Display the table of players before checking for updates
-    st.table(db.players_df)
+    st.table(db.players_df.sort_values("Elo", ascending=False).reset_index(drop=True))
 
     st.subheader("Add Player")
     new_player = st.text_input("Enter player name", key="new_player")
