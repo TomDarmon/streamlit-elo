@@ -1,0 +1,2 @@
+GCS_BUCKET = "elo-match"
+DEFAULT_ELO = 1500
