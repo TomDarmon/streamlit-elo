@@ -4,6 +4,10 @@ from database import db
 def matches_page():
     update_needed = False  # Initialize a variable to track if the table needs to be updated
 
+    if "loaded" not in st.session_state:
+        st.session_state.loaded = True
+        db.load_data()
+
     st.header("Match Results")
     st.table(db.matches_df)
 

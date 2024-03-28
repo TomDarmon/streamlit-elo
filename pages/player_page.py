@@ -4,6 +4,9 @@ from database import db
 def players_page():
 
     update_needed = False
+    if "loaded" not in st.session_state:
+        st.session_state.loaded = True
+        db.load_data()
 
     st.header("Registered Players")
     
