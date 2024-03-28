@@ -1,10 +1,10 @@
 import pandas as pd
-from config import GCS_BUCKET, DEFAULT_ELO
+from config import GCS_BUCKET, DEFAULT_ELO, ENV
 
 class Database:
     def __init__(self):
-        self.players_file = f"gs://{GCS_BUCKET}/players.csv"
-        self.matches_file = f"gs://{GCS_BUCKET}/matches.csv"
+        self.players_file = f"gs://{GCS_BUCKET}/players_{ENV}.csv"
+        self.matches_file = f"gs://{GCS_BUCKET}/matches_{ENV}.csv"
         self.load_data()
 
     def load_data(self):

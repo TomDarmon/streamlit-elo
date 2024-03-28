@@ -10,4 +10,5 @@ gcloud run deploy elo-match \
   --service-account=elo-match-cloud-run@$PROJECT.iam.gserviceaccount.com \
   --max-instances=1 \
   --cpu=1 \
-  --memory=512Mi
+  --memory=512Mi \
+  --set-env-vars="ENV=prod"
