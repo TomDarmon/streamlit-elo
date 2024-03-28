@@ -24,7 +24,7 @@ class Database:
 
     def add_player(self, player):
         if player not in self.players_df["Player"].values:
-            new_row = pd.DataFrame({"Player": [player], "Elo": [DEFAULT_ELO]})
+            new_row = pd.DataFrame({"Player": [player], "Elo": [DEFAULT_ELO]}).astype({"Elo": int})
             self.players_df = pd.concat([self.players_df, new_row], ignore_index=True)
             self.save_data()
 
