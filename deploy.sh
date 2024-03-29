@@ -8,8 +8,9 @@ gcloud run deploy elo-match \
   --region europe-west1 \
   --allow-unauthenticated \
   --service-account=elo-match-cloud-run@$PROJECT.iam.gserviceaccount.com \
-  --max-instances=2 \
-  --concurrency=1 \
-  --cpu=0.5 \
+  --max-instances=4 \
+  --cpu=1 \
   --memory=256Mi \
-  --set-env-vzars="ENV=prod"
+  --session-affinity \
+  --cpu-boost \
+  --set-env-vars="ENV=prod"
