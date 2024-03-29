@@ -9,7 +9,8 @@ def matches_page():
         db.load_data()
 
     st.header("Match Results")
-    st.table(db.matches_df)
+    match_table = st.empty()
+    match_table.table(db.matches_df)
 
     st.subheader("Add Match Result")
     player1 = st.selectbox("Select Player 1", db.players_df["Player"])
@@ -18,7 +19,7 @@ def matches_page():
     if st.button("Add Match"):
         db.add_match(player1, player2, winner)
         st.success("Match result added successfully!")
-        update_needed = True  # Set the flag to True to indicate the table needs to be refreshed
+        match_table.table(db.matches_df)
 
     st.subheader("Remove Match")
     if len(db.matches_df) > 0:
@@ -26,12 +27,8 @@ def matches_page():
         if st.button("Remove Match"):
             db.remove_match(match_index)
             st.success("Match removed successfully!")
-            update_needed = True  # Set the flag to True to indicate the table needs to be refreshed
+            match_table.table(db.matches_df)
     else:
         st.write("No matches to remove.")
-
-    # Check if the table needs to be refreshed due to an update
-    if update_needed:
-        st.experimental_rerun()  # Refresh the table to reflect the changes
 
 matches_page()
