@@ -9,8 +9,7 @@ def latest_results_page():
         db.load_data()
 
     st.header("Match Results")
-    match_table = st.empty()
-    match_table.table(db.matches_df)
+    st.dataframe(db.matches_df.sort_values("Date", ascending=False).reset_index(drop=True))
 
     st.subheader("Add Match Result")
     player1 = st.selectbox("Select Player 1", db.players_df["Player"])

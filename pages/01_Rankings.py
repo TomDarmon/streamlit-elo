@@ -9,7 +9,6 @@ def rankings_page():
     st.header("Registered Players")
     
     # Display the current table of players
-    players_table = st.empty()
     players_table = st.dataframe(
         (
             db.players_df.sort_values("Elo", ascending=False)

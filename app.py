@@ -2,10 +2,15 @@ import streamlit as st
 import pandas as pd
 import networkx as nx
 import plotly.graph_objects as go
+import math
 
 from database import db
 
-st.title("ATPing Ranking")
+
+
+def main():
+    st.title("ATPing Ranking")
+    network_plot()
 
 
 def network_plot():
@@ -29,7 +34,7 @@ def network_plot():
         .to_dict()
     )
     node_sizes = [
-        wins.get(node, 0) * 10 for node in H.nodes()
+        math.log((wins.get(node, 0) + 1)) * 20 for node in H.nodes()
     ]  # Multiply by 10 for better visualization
 
     # Set positions using a layout algorithm
@@ -100,5 +105,4 @@ def network_plot():
     # Display the figure
     st.plotly_chart(fig)
 
-
-network_plot()
+main()
