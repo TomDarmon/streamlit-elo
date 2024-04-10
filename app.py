@@ -80,7 +80,7 @@ def network_plot():
         marker=dict(
             size=node_sizes,
             color=[
-                x / 10 for x in node_sizes
+                wins[node] if node in wins else 0 for node in H.nodes()
             ],  # Color can be a list of values, here we use number of wins
             colorscale=["#111146", "#2bb6bf", "#e61f68"],
             showscale=True,
