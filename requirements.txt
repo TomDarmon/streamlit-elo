@@ -1,3 +1,7 @@
 streamlit==1.32.2
+watchdog==4.0.0
 fsspec==2024.3.1
 gcsfs==2024.3.1
+plotly==5.20.0
+networkx==3.3
+scipy==1.13.0
