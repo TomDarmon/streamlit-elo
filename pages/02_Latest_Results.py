@@ -1,7 +1,7 @@
 import streamlit as st
 from database import db
 
-def matches_page():
+def latest_results_page():
     update_needed = False  # Initialize a variable to track if the table needs to be updated
 
     if "loaded" not in st.session_state:
@@ -31,4 +31,4 @@ def matches_page():
     else:
         st.write("No matches to remove.")
 
-matches_page()
+latest_results_page()

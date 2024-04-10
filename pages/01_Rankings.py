@@ -1,7 +1,7 @@
 import streamlit as st
 from database import db
 
-def players_page():
+def rankings_page():
     if "loaded" not in st.session_state:
         st.session_state.loaded = True
         db.load_data()
@@ -38,4 +38,4 @@ def players_page():
         players_table.table(db.players_df.sort_values("Elo", ascending=False).reset_index(drop=True))
 
 
-players_page()
+rankings_page()
