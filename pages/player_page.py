@@ -10,7 +10,16 @@ def players_page():
     
     # Display the current table of players
     players_table = st.empty()
-    players_table.table(db.players_df.sort_values("Elo", ascending=False).reset_index(drop=True))
+    players_table = st.dataframe(
+        (
+            db.players_df.sort_values("Elo", ascending=False)
+            .reset_index(drop=True)
+            .assign(Rank=lambda x: x.index + 1)
+        ),
+        use_container_width=True,
+        hide_index=True,
+        column_order=["Rank", "Player", "Elo"],
+    )
 
     st.subheader("Add Player")
     new_player = st.text_input("Enter player name", key="new_player")

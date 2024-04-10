@@ -5,6 +5,8 @@ class Database:
     def __init__(self):
         self.players_file = f"gs://{GCS_BUCKET}/players_{ENV}.csv"
         self.matches_file = f"gs://{GCS_BUCKET}/matches_{ENV}.csv"
+        self.players_df = None
+        self.matches_df = None
         self.load_data()
 
     def load_data(self):
