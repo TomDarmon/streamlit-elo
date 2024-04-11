@@ -34,7 +34,7 @@ def main():
     st.plotly_chart(fig)
 
 
-@st.cache_resource
+@st.cache_resource(max_entries=3)
 def network_plot(matches_df):
     G = nx.MultiDiGraph()
     for _, row in matches_df.iterrows():

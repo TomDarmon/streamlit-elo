@@ -1,8 +1,11 @@
 FROM python:3.10-slim
 
 COPY requirements.txt .
-RUN pip install uv
-RUN uv pip install -r requirements.txt
+# RUN pip install uv
+# RUN uv venv
+RUN pip install -r requirements.txt
+
+ENV ENV=prod
 
 WORKDIR /app
 COPY . ./

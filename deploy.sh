@@ -1,6 +1,6 @@
 PROJECT=blank-gpt
 
-# gcloud builds submit --project=$PROJECT --tag europe-docker.pkg.dev/$PROJECT/elo-match/elo-match-image . 
+gcloud builds submit --project=$PROJECT --tag europe-docker.pkg.dev/$PROJECT/elo-match/elo-match-image . 
 
 gcloud run deploy elo-match \
   --image europe-docker.pkg.dev/blank-gpt/elo-match/elo-match-image \

@@ -6,21 +6,21 @@ class Database:
     def __init__(self):
         self.players_file = f"gs://{GCS_BUCKET}/players_{ENV}.csv"
         self.matches_file = f"gs://{GCS_BUCKET}/matches_{ENV}.csv"
-        self.players_df = None
-        self.matches_df = None
-        self.load_data()
+        self.players_df, self.matches_df = self.load_data()
 
-    @st.cache_data(show_spinner="Fetching data...", hash_funcs={"database.Database": lambda x: (hash(x.players_file), hash(x.matches_file))})
+    @st.cache_data(show_spinner="Fetching data...", hash_funcs={"database.Database": lambda x: (hash(x.players_file), hash(x.matches_file))}, max_entries=3)
     def load_data(self):
         try:
-            self.players_df = pd.read_csv(self.players_file, dtype={"Elo": int})
+            players_df = pd.read_csv(self.players_file, dtype={"Elo": int})
         except FileNotFoundError:
-            self.players_df = pd.DataFrame(columns=["Player", "Elo"], dtype={"Elo": int})
+            players_df = pd.DataFrame(columns=["Player", "Elo"], dtype={"Elo": int})
 
         try:
-            self.matches_df = pd.read_csv(self.matches_file, dtype={"Elo Change P1": int, "Elo Change P2": int})
+            matches_df = pd.read_csv(self.matches_file, dtype={"Elo Change P1": int, "Elo Change P2": int})
         except FileNotFoundError:
-            self.matches_df = pd.DataFrame(columns=["Player 1", "Player 2", "Winner", "Date", "Elo Change P1", "Elo Change P2"])
+            matches_df = pd.DataFrame(columns=["Player 1", "Player 2", "Winner", "Date", "Elo Change P1", "Elo Change P2"])
+
+        return players_df, matches_df
 
     def save_data(self):
         self.players_df.to_csv(self.players_file, index=False)
