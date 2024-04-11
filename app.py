@@ -10,6 +10,10 @@ from database import db
 
 def main():
     st.title("ATPing Ranking")
+
+    st.subheader(f"Current :crown: of the Hill: *{db.get_king()}*")
+
+    st.subheader("Games Results")
     network_plot()
 
 
@@ -28,14 +32,17 @@ def network_plot():
 
     # Calculate node sizes (number of wins)
     wins = db.matches_df["Winner"].value_counts().to_dict()
+    print(wins)
     games = (
         pd.concat([db.matches_df["Player 1"], db.matches_df["Player 2"]])
         .value_counts()
         .to_dict()
     )
+    print(games)
+    win_rates = {player: wins.get(player, 0) / games[player] for player in games}
     node_sizes = [
-        math.log((wins.get(node, 0) + 1)) * 20 for node in H.nodes()
-    ]  # Multiply by 10 for better visualization
+        math.log((games.get(node, 0) + 1)) * 10 for node in H.nodes()
+    ]
 
     # Set positions using a layout algorithm
     pos = nx.kamada_kawai_layout(H)
@@ -79,13 +86,13 @@ def network_plot():
         textposition="top center",
         marker=dict(
             size=node_sizes,
-            color=[
-                wins[node] if node in wins else 0 for node in H.nodes()
-            ],  # Color can be a list of values, here we use number of wins
+            color=[win_rates[node] if node in wins else 0 for node in H.nodes()],
             colorscale=["#111146", "#2bb6bf", "#e61f68"],
+            cmin=0,
+            cmax=1,
             showscale=True,
             colorbar=dict(
-                thickness=15, title="Number of Wins", xanchor="left", titleside="right"
+                thickness=15, title="Win rate", xanchor="left", titleside="right"
             ),
             line_width=2,
         ),

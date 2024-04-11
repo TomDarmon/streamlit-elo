@@ -84,5 +84,8 @@ class Database:
         self.players_df.loc[self.players_df["Player"] == player1, "Elo"] = int(player1_new_elo)
         self.players_df.loc[self.players_df["Player"] == player2, "Elo"] = int(player2_new_elo)
         return elo_change_player1, elo_change_player2
+    
+    def get_king(self):
+        return self.players_df.loc[self.players_df["Elo"].idxmax()]["Player"]
 
 db = Database()
