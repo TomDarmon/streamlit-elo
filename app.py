@@ -30,12 +30,14 @@ def main():
     st.subheader(f"Current :crown: of the Hill: *{db.get_king()}*")
 
     st.subheader("Games Results")
-    network_plot()
+    fig = network_plot(db.matches_df)
+    st.plotly_chart(fig)
 
 
-def network_plot():
+@st.cache_resource
+def network_plot(matches_df):
     G = nx.MultiDiGraph()
-    for _, row in db.matches_df.iterrows():
+    for _, row in matches_df.iterrows():
         G.add_edge(row["Player 1"], row["Player 2"])
 
     # Convert to undirected graph for edge width calculation
@@ -121,10 +123,8 @@ def network_plot():
             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
         ),
     )
-    # width=2000
 
-    # Display the figure
-    st.plotly_chart(fig)
+    return fig
 
 
 def get_last_activity():

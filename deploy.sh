@@ -11,6 +11,6 @@ gcloud run deploy elo-match \
   --max-instances=4 \
   --min-instances=0 \
   --cpu=1 \
-  --memory=256Mi \
+  --memory=512Mi \
   --session-affinity \
   --set-env-vars="ENV=prod"

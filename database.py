@@ -1,5 +1,5 @@
 import pandas as pd
-
+import streamlit as st
 from config import GCS_BUCKET, DEFAULT_ELO, ENV
 
 class Database:
@@ -10,6 +10,7 @@ class Database:
         self.matches_df = None
         self.load_data()
 
+    @st.cache_data(show_spinner="Fetching data...", hash_funcs={"database.Database": lambda x: (hash(x.players_file), hash(x.matches_file))})
     def load_data(self):
         try:
             self.players_df = pd.read_csv(self.players_file, dtype={"Elo": int})
