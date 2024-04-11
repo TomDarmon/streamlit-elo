@@ -1,7 +1,7 @@
 import streamlit as st
 from database import db
 
-def matches_page():
+def latest_results_page():
     update_needed = False  # Initialize a variable to track if the table needs to be updated
 
     if "loaded" not in st.session_state:
@@ -10,7 +10,7 @@ def matches_page():
 
     st.header("Match Results")
     match_table = st.empty()
-    match_table.table(db.matches_df)
+    match_table.dataframe(db.matches_df.sort_values("Date", ascending=False).reset_index(drop=True))
 
     st.subheader("Add Match Result")
     player1 = st.selectbox("Select Player 1", db.players_df["Player"])
@@ -19,7 +19,7 @@ def matches_page():
     if st.button("Add Match"):
         db.add_match(player1, player2, winner)
         st.success("Match result added successfully!")
-        match_table.table(db.matches_df)
+        match_table.dataframe(db.matches_df.sort_values("Date", ascending=False).reset_index(drop=True))
 
     st.subheader("Remove Match")
     if len(db.matches_df) > 0:
@@ -27,8 +27,9 @@ def matches_page():
         if st.button("Remove Match"):
             db.remove_match(match_index)
             st.success("Match removed successfully!")
-            match_table.table(db.matches_df)
+            match_table.dataframe(db.matches_df.sort_values("Date", ascending=False).reset_index(drop=True))
     else:
         st.write("No matches to remove.")
 
-matches_page()
+
+latest_results_page()
