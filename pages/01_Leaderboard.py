@@ -6,7 +6,7 @@ def rankings_page():
         st.session_state.loaded = True
         db.load_data()
 
-    st.header("Registered Players")
+    st.header("Leaderboard")
     
     # Display the current table of players
     players_table = st.dataframe(
@@ -20,7 +20,7 @@ def rankings_page():
         column_order=["Rank", "Player", "Elo"],
     )
 
-    st.subheader("Add Player")
+    st.subheader("Register Player")
     new_player = st.text_input("Enter player name", key="new_player")
     if st.button("Add Player"):
         db.add_player(new_player)

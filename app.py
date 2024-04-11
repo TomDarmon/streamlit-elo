@@ -1,3 +1,6 @@
+from datetime import datetime
+import pytz
+import requests
 import streamlit as st
 import pandas as pd
 import networkx as nx
@@ -5,11 +8,24 @@ import plotly.graph_objects as go
 import math
 
 from database import db
+from config import PING_URL
 
 
 
 def main():
     st.title("ATPing Ranking")
+
+    st.subheader(f"Central Court :tennis: Availability")
+
+    last_activity, time_diff = get_last_activity()
+
+    st.write(f"Last activity: {last_activity} | {display_time_diff(time_diff)} ago")
+
+    if st.button("Say I'm currently playing! :wave:"):
+        update_last_activity()
+        st.success("Ping sent successfully!")
+
+
 
     st.subheader(f"Current :crown: of the Hill: *{db.get_king()}*")
 
@@ -32,13 +48,11 @@ def network_plot():
 
     # Calculate node sizes (number of wins)
     wins = db.matches_df["Winner"].value_counts().to_dict()
-    print(wins)
     games = (
         pd.concat([db.matches_df["Player 1"], db.matches_df["Player 2"]])
         .value_counts()
         .to_dict()
     )
-    print(games)
     win_rates = {player: wins.get(player, 0) / games[player] for player in games}
     node_sizes = [
         math.log((games.get(node, 0) + 1)) * 10 for node in H.nodes()
@@ -111,5 +125,42 @@ def network_plot():
 
     # Display the figure
     st.plotly_chart(fig)
+
+
+def get_last_activity():
+    response = requests.get( f"{PING_URL}/last_activity", timeout=5)
+    response.raise_for_status()
+    
+    last_activity = response.json()["last_activity"]
+    
+    last_activity = datetime.fromisoformat(last_activity)
+
+    last_activity_utc = last_activity.replace(tzinfo=pytz.utc)
+    paris_tz = pytz.timezone("Europe/Paris")
+    last_activity_paris_tz = paris_tz.normalize(last_activity_utc).strftime("%A %d %B %Y %H:%M:%S")
+
+    time_diff = datetime.now(pytz.utc) - last_activity_utc
+
+    return last_activity_paris_tz, time_diff
+
+def display_time_diff(time_diff):
+    days = time_diff.days
+    hours, remainder = divmod(time_diff.seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+
+    if days == 0:
+        if hours == 0:
+            return f"{minutes} minutes"
+        return f"{hours} hours, {minutes} minutes"
+    
+    return f"{days} days, {hours} hours, {minutes} minutes"
+
+
+def update_last_activity():
+    response = requests.get( f"{PING_URL}/ping_from_board", timeout=5)
+    response.raise_for_status()
+
+
+    
 
 main()

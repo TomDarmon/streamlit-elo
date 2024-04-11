@@ -1,4 +1,5 @@
 import pandas as pd
+
 from config import GCS_BUCKET, DEFAULT_ELO, ENV
 
 class Database:
