@@ -8,7 +8,11 @@ class Database:
         self.matches_file = f"gs://{GCS_BUCKET}/matches_{ENV}.csv"
         self.players_df, self.matches_df = self.load_data()
 
-    @st.cache_data(show_spinner="Fetching data...", hash_funcs={"database.Database": lambda x: (hash(x.players_file), hash(x.matches_file))}, max_entries=3)
+    # @st.cache_data(
+    #     show_spinner="Fetching data...",
+    #     hash_funcs={"database.Database": lambda x: (hash(x.players_file), hash(x.matches_file))},
+    #     max_entries=3
+    # )
     def load_data(self):
         try:
             players_df = pd.read_csv(self.players_file, dtype={"Elo": int})
