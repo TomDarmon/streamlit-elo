@@ -27,7 +27,16 @@ def rankings_page():
         db.add_player(new_player)
         st.success(f"Player {new_player} added successfully!")
         # Update the displayed table with the new player
-        players_table.table(db.players_df.sort_values("Elo", ascending=False).reset_index(drop=True))
+        players_table.dataframe(
+            (
+                db.players_df.sort_values("Elo", ascending=False)
+                .reset_index(drop=True)
+                .assign(Rank=lambda x: x.index + 1)
+            ),
+            use_container_width=True,
+            hide_index=True,
+            column_order=["Rank", "Player", "Elo"],
+        )
 
     st.subheader("Remove Player")
     remove_player = st.selectbox("Select player to remove", db.players_df["Player"], key="remove_player")
@@ -35,7 +44,16 @@ def rankings_page():
         db.remove_player(remove_player)
         st.success(f"Player {remove_player} removed successfully!")
         # Update the displayed table after removing the player
-        players_table.table(db.players_df.sort_values("Elo", ascending=False).reset_index(drop=True))
+        players_table.dataframe(
+            (
+                db.players_df.sort_values("Elo", ascending=False)
+                .reset_index(drop=True)
+                .assign(Rank=lambda x: x.index + 1)
+            ),
+            use_container_width=True,
+            hide_index=True,
+            column_order=["Rank", "Player", "Elo"],
+        )
 
 
 rankings_page()
